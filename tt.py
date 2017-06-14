@@ -20,13 +20,15 @@ loghandler.setFormatter(logformatter)
 logger.addHandler(loghandler)
 logger.info('-------------')  
 
+debugLevel = 0
+
 # ######### CNTL-C #####
 # Callback and setup to catch control-C and quit program
 
 _funcToRun=None
 
 def signal_handler(signal, frame):
-  print '\n** Control-C Detected'
+  if debugLevel: print '\n** Control-C Detected'
   if (_funcToRun != None):
      _funcToRun()
   sys.exit(0)     # raise SystemExit exception
@@ -51,7 +53,7 @@ class digitalEntity():
   def __init__(self,dEname,tSleep=defaultSleep):     #run about once a minute 
     # SINGLETON TEST 
     if (digitalEntity.pHandle!=None): 
-        print "Second digitalEntity, not starting"
+        if debugLevel: print "Second digitalEntity, not starting"
         return None
 
     # INITIALIZE CLASS INSTANCE
@@ -61,31 +63,31 @@ class digitalEntity():
     digitalEntity.pHandle = multiprocessing.Process(name=dEname, target=self.dEmain, 
                                                args=(tSleep,))
     digitalEntity.pHandle.start()
-    print "%s.digitalEntity told to start" % dEname
+    if debugLevel: print "%s.digitalEntity told to start" % dEname
   #end init()
 
   # digitalEntity main process
   def dEmain(self,tSleep=defaultSleep):   
     myname = multiprocessing.current_process().name  
-    print "%s.dEmain started with tSleep=%f" % (myname,tSleep)
+    if debugLevel: print "%s.dEmain started with tSleep=%f" % (myname,tSleep)
     logger.info('%s.dEmain started',myname)
     i=0
     while True:
         i+=1
-        print "%s.dEmain execution %i" % (myname,i)
+        if debugLevel: print "%s.dEmain execution %i" % (myname,i)
         logger.info('%s.dEmain exection: %i',myname, i )
         time.sleep(tSleep)
     
 
-    print("dEmain end reached")
+    if debugLevel: print("dEmain end reached")
 
   def cancel(self):
      myname = multiprocessing.current_process().name  
-     print "%s.cancel() called" % myname
+     if debugLevel: print "%s.cancel() called" % myname
      logger.info('%s.cancel() called',myname)
-     print "\nWaiting for %s dE.workerThread to quit\n" % self.pHandle.name
+     if debugLevel: print "\nWaiting for %s dE.workerThread to quit\n" % self.pHandle.name
      self.pHandle.join()
-     print "%s.cancel() complete" % myname     
+     if debugLevel: print "%s.cancel() complete" % myname     
  
 
 # ##### digitalEntity tt ######
@@ -93,18 +95,18 @@ class digitalEntity():
 
 def main():
 
-  tt=digitalEntity(dEname="tt")  #create 
+  tt=digitalEntity(dEname="tt",tSleep=3600)  #create 
   set_cntl_c_handler(tt.cancel)
 
   try:
     while True:
-      print "\n tt.py: main()"
-      time.sleep(10)
+      if debugLevel: print "\n tt.py: main()"
+      time.sleep(3600)
     #end while
   except SystemExit:
-    print "tt.py: Bye Bye"    
+    if debugLevel: print "tt.py: Bye Bye"    
   except:
-    print "Exception Raised"
+    if debugLevel: print "Exception Raised"
     traceback.print_exc()  
 
 if __name__ == "__main__":
