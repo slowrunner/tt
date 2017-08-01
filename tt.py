@@ -75,7 +75,7 @@ class digitalEntity():
     while True:
         i+=1
         if debugLevel: print "%s.dEmain execution %i" % (myname,i)
-        logger.info('%s.dEmain exection: %i',myname, i )
+        logger.info('%s.dEmain execution: %i',myname, i )
         time.sleep(tSleep)
     
 
