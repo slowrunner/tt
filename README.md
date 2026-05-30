@@ -1,8 +1,8 @@
 # tt
 Python Digital Entity with a unique, contiguous persistence
 
-[![DOI](https://zenodo.org/badge/94361188.svg)](https://zenodo.org/badge/latestdoi/94361188)
 
+[![DOI](https://zenodo.org/badge/DOI/10.5281/zenodo.808776.svg)](https://doi.org/10.5281/zenodo.808776)
 
 To move tt to another machine:
   git clone https://github.com/slowrunner/tt 
